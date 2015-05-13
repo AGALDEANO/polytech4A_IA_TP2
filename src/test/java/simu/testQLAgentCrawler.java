@@ -1,8 +1,8 @@
 package test.java.simu;
 
-import agent.rlagent.RLAgent;
 import environnement.crawler.CrawlingRobotEnvironnement;
 import main.java.agent.rlagent.QLearningAgent;
+import main.java.agent.rlagent.RLAgent;
 import vueCrawler.VueCrawlerAbstrait;
 import vueCrawler.VueCrawlerRL;
 

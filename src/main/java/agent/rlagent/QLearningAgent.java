@@ -1,10 +1,10 @@
 package main.java.agent.rlagent;
 
-import agent.rlagent.RLAgent;
 import environnement.Action;
 import environnement.Environnement;
 import environnement.Etat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
  */
 public class QLearningAgent extends RLAgent {
     private Map<Etat, Map<Action, Double>> qTable = new HashMap<>();
-    //VOTRE CODE
-    //...
-
 
     /**
      * @param alpha
@@ -27,7 +24,6 @@ public class QLearningAgent extends RLAgent {
     public QLearningAgent(double alpha, double gamma,
                           Environnement _env) {
         super(alpha, gamma, _env);
-
     }
 
 
@@ -38,16 +34,15 @@ public class QLearningAgent extends RLAgent {
      */
     @Override
     public List<Action> getPolitique(Etat e) {
-        if(e == null || !qTable.containsKey(e)) return null;
-
-        Double maxValue = qTable.get(e)
-                .entrySet().stream()
-                .mapToDouble(value -> value.getValue())
-                .max().getAsDouble();
+        if (e == null) return new ArrayList<>();
+        if (!qTable.containsKey(e)) {
+            System.out.println("Politique non définie.");
+            return env.getActionsPossibles(e);
+        }
 
         return qTable.get(e)
                 .entrySet().stream()
-                .filter(actionDoubleEntry -> maxValue.equals(actionDoubleEntry.getValue()))
+                .filter(actionDoubleEntry -> actionDoubleEntry.getValue().equals(getValeur(e)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
@@ -57,7 +52,7 @@ public class QLearningAgent extends RLAgent {
      */
     @Override
     public double getValeur(Etat e) {
-        if(e.estTerminal() || !qTable.containsKey(e)) return 0;
+        if (e.estTerminal() || !qTable.containsKey(e)) return 0;
 
         return qTable.get(e)
                 .entrySet().stream()
@@ -99,11 +94,7 @@ public class QLearningAgent extends RLAgent {
      */
     @Override
     public void endStep(Etat e, Action a, Etat esuivant, double reward) {
-        Double maxB = qTable.containsKey(esuivant) ? qTable.get(esuivant)
-                .entrySet().stream()
-                .mapToDouble(value -> value.getValue())
-                .max().getAsDouble() : 0;
-        Double d = (1 - alpha) * getQValeur(e, a) + alpha * (reward + gamma * maxB);
+        Double d = (1 - alpha) * getQValeur(e, a) + alpha * (reward + gamma * getValeur(e));
         setQValeur(e, a, d);
     }
 

@@ -1,9 +1,9 @@
 package test.java.simu;
 
-import agent.rlagent.RLAgent;
 import environnement.gridworld.GridworldEnvironnement;
 import environnement.gridworld.GridworldMDP;
 import main.java.agent.rlagent.QLearningAgent;
+import main.java.agent.rlagent.RLAgent;
 import vueGridworld.VueGridworldRL;
 
 import javax.swing.*;

@@ -1,9 +1,11 @@
-package agent.strategy;
+package main.java.agent.strategy;
 
-import agent.rlagent.RLAgent;
+import agent.strategy.StrategyExploration;
 import environnement.Action;
 import environnement.Etat;
+import main.java.agent.rlagent.RLAgent;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -13,17 +15,14 @@ import java.util.Random;
  * @author lmatignon
  */
 public class StrategyGreedy extends StrategyExploration {
-    //VOTRE CODE
-    //...
-
+    Double epsilon;
 
     private Random rand = new Random();
 
 
     public StrategyGreedy(RLAgent agent, double epsilon) {
         super(agent);
-        //VOTRE CODE
-        //...
+        setEpsilon(epsilon);
     }
 
     /**
@@ -31,16 +30,18 @@ public class StrategyGreedy extends StrategyExploration {
      */
     @Override
     public Action getAction(Etat _e) {
-        //VOTRE CODE
-        //...
+        List<Action> actions = agent.getActionsLegales(_e);
+        if(actions.size() == 0) return null;
+        if (rand.nextDouble() <= epsilon) return actions.get(rand.nextInt(actions.size()));
 
-        return null;
+        List<Action> bestActions = agent.getPolitique(_e);
+        return bestActions.get(rand.nextInt(bestActions.size()));
     }
 
 
     public void setEpsilon(double epsilon) {
-        //VOTRE CODE
-        //...
+        if (epsilon > 1 || epsilon < 0) throw new RuntimeException("Epsilon doit être compris entre 0 et 1 !");
+        this.epsilon = epsilon;
     }
 
 

@@ -1,8 +1,9 @@
-package agent.strategy;
+package main.java.agent.strategy;
 
-import agent.rlagent.RLAgent;
+import agent.strategy.StrategyExploration;
 import environnement.Action;
 import environnement.Etat;
+import main.java.agent.rlagent.RLAgent;
 
 import java.util.Random;
 

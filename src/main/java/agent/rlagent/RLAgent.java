@@ -1,13 +1,14 @@
-package agent.rlagent;
+package main.java.agent.rlagent;
 
 import agent.ValueAgent;
+import agent.rlagent.IRLAgent;
 import agent.strategy.StrategyExploration;
-import agent.strategy.StrategyGreedy;
 import agent.strategy.StrategyManuel;
-import agent.strategy.StrategySoftmax;
 import environnement.Action;
 import environnement.Environnement;
 import environnement.Etat;
+import main.java.agent.strategy.StrategyGreedy;
+import main.java.agent.strategy.StrategySoftmax;
 
 import java.util.List;
 import java.util.Observable;
