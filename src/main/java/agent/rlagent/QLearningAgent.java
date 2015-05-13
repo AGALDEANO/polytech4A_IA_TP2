@@ -1,17 +1,23 @@
 package main.java.agent.rlagent;
 
+import agent.rlagent.RLAgent;
 import environnement.Action;
 import environnement.Environnement;
 import environnement.Etat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author laetitiamatignon
  */
-public class QLearningAgent extends agent.rlagent.RLAgent {
+public class QLearningAgent extends RLAgent {
+    private Map<Etat, Map<Action, Double>> qTable = new HashMap<>();
     //VOTRE CODE
     //...
+
 
     /**
      * @param alpha
@@ -21,8 +27,6 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
     public QLearningAgent(double alpha, double gamma,
                           Environnement _env) {
         super(alpha, gamma, _env);
-        //VOTRE CODE
-        //...
 
     }
 
@@ -34,11 +38,18 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public List<Action> getPolitique(Etat e) {
-        //VOTRE CODE
-        //...
-        return null;
+        if(e == null || !qTable.containsKey(e)) return null;
 
+        Double maxValue = qTable.get(e)
+                .entrySet().stream()
+                .mapToDouble(value -> value.getValue())
+                .max().getAsDouble();
 
+        return qTable.get(e)
+                .entrySet().stream()
+                .filter(actionDoubleEntry -> maxValue.equals(actionDoubleEntry.getValue()))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -46,9 +57,12 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public double getValeur(Etat e) {
-        //VOTRE CODE
-        //...
-        return 0.0;
+        if(e.estTerminal() || !qTable.containsKey(e)) return 0;
+
+        return qTable.get(e)
+                .entrySet().stream()
+                .mapToDouble(value -> value.getValue())
+                .max().getAsDouble();
 
     }
 
@@ -59,9 +73,8 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public double getQValeur(Etat e, Action a) {
-        //VOTRE CODE
-        //...
-        return 0.0;
+        if (qTable.containsKey(e) && qTable.get(e).containsKey(a)) return qTable.get(e).get(a);
+        return 0;
     }
 
     /**
@@ -69,15 +82,9 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public void setQValeur(Etat e, Action a, double d) {
-        //VOTRE CODE
-        //...
-
-
-        //mise a jour vmin et vmax pour affichage gradient de couleur
-        //...
-
+        if (!qTable.containsKey(e)) qTable.put(e, new HashMap<>());
+        qTable.get(e).put(a, d);
         this.notifyObs();
-
     }
 
 
@@ -92,8 +99,12 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public void endStep(Etat e, Action a, Etat esuivant, double reward) {
-        //VOTRE CODE
-        //...
+        Double maxB = qTable.containsKey(esuivant) ? qTable.get(esuivant)
+                .entrySet().stream()
+                .mapToDouble(value -> value.getValue())
+                .max().getAsDouble() : 0;
+        Double d = (1 - alpha) * getQValeur(e, a) + alpha * (reward + gamma * maxB);
+        setQValeur(e, a, d);
     }
 
     @Override
@@ -107,10 +118,7 @@ public class QLearningAgent extends agent.rlagent.RLAgent {
      */
     @Override
     public void reset() {
-        this.episodeNb = 0;
-        //VOTRE CODE
-        //...
-
+        qTable.clear();
     }
 
 
