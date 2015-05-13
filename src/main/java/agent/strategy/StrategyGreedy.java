@@ -31,7 +31,6 @@ public class StrategyGreedy extends StrategyExploration {
     @Override
     public Action getAction(Etat _e) {
         List<Action> actions = agent.getActionsLegales(_e);
-        if(actions.size() == 0) return null;
         if (rand.nextDouble() <= epsilon) return actions.get(rand.nextInt(actions.size()));
 
         List<Action> bestActions = agent.getPolitique(_e);

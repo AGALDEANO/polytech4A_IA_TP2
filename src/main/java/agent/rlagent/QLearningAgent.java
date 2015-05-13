@@ -40,6 +40,7 @@ public class QLearningAgent extends RLAgent {
             return env.getActionsPossibles(e);
         }
 
+
         return qTable.get(e)
                 .entrySet().stream()
                 .filter(actionDoubleEntry -> actionDoubleEntry.getValue().equals(getValeur(e)))
@@ -94,7 +95,7 @@ public class QLearningAgent extends RLAgent {
      */
     @Override
     public void endStep(Etat e, Action a, Etat esuivant, double reward) {
-        Double d = (1 - alpha) * getQValeur(e, a) + alpha * (reward + gamma * getValeur(e));
+        Double d = (1 - alpha) * getQValeur(e, a) + alpha * (reward + gamma * getValeur(esuivant));
         setQValeur(e, a, d);
     }
 
