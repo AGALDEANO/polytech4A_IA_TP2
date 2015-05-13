@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="RLLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/RLLib.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/RLLib.jar!/doc" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/RLLib.jar!/javadocRL" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
